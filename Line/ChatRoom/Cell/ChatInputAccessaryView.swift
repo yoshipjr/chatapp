@@ -8,10 +8,33 @@
 import UIKit
 
 final class ChatInputAccessaryView: UIView {
+
+    @IBOutlet weak var sendButton: UIButton! {
+        didSet {
+            sendButton.layer.cornerRadius = 15
+            sendButton.imageView?.contentMode = .scaleAspectFill
+            sendButton.contentVerticalAlignment = .fill
+            sendButton.isEnabled = false
+        }
+    }
+
+    @IBOutlet weak var chatTextView: UITextView! {
+        didSet {
+            chatTextView.layer.cornerRadius = 15
+            chatTextView.layer.borderColor = UIColor.rgb(red: 230, green: 230, blue: 230).cgColor
+            chatTextView.layer.borderWidth = 1
+        }
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         nibInit()
+        autoresizingMask = .flexibleHeight
+    }
+
+    override var intrinsicContentSize: CGSize {
+        return .zero
     }
 
     private func nibInit() {
