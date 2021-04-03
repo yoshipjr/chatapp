@@ -22,7 +22,9 @@ final class ChatListViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        navigationController?.navigationBar.barTintColor = .rgb(red: 39, green: 49, blue: 69)
+        navigationItem.title = "トーク"
+        navigationController?.navigationBar.titleTextAttributes = [ .foregroundColor: UIColor.white]
     }
 
 
@@ -40,5 +42,11 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let storyboard = UIStoryboard.init(name: "ChatRoom", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "ChatRoomViewController")
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
