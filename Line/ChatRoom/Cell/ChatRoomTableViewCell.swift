@@ -9,6 +9,16 @@ import UIKit
 
 final class ChatRoomTableViewCell: UITableViewCell {
 
+    var messageText: String? {
+        didSet {
+            guard  let text = messageText else { return }
+            let width = estimateFrameForTextView(text: text).width + 10
+
+            messageTextViewConstraint.constant = width
+            messageTextView.text = text
+        }
+    }
+
     // MARK: properties
     @IBOutlet weak var userImageView: UIImageView! {
         didSet {
@@ -22,6 +32,7 @@ final class ChatRoomTableViewCell: UITableViewCell {
         }
     }
 
+    @IBOutlet weak var messageTextViewConstraint: NSLayoutConstraint!
     @IBOutlet weak var dateLabel: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -30,5 +41,12 @@ final class ChatRoomTableViewCell: UITableViewCell {
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+    }
+
+    private func estimateFrameForTextView(text: String) -> CGRect {
+        let size = CGSize(width: 200, height: 1000)
+        let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
+
+        return NSString(string: text).boundingRect(with: size, options: options, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 14)], context: nil)
     }
 }

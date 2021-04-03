@@ -23,6 +23,9 @@
                     <rect key="frame" x="422" y="210.5" width="15" height="28"/>
                     <fontDescription key="fontDescription" type="system" pointSize="23"/>
                     <state key="normal" image="send_icon"/>
+                    <connections>
+                        <action selector="tappedSendButton:" destination="-1" eventType="touchUpInside" id="Aca-sj-7Fd"/>
+                    </connections>
                 </button>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="249" scrollEnabled="NO" text="ここにメッセージがはいります" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="WcZ-YD-4Mp">
                     <rect key="frame" x="10" y="54" width="402" height="341"/>
