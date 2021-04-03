@@ -21,6 +21,8 @@
 		7D816966261824CD00F37996 /* ChatRoomViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D816965261824CD00F37996 /* ChatRoomViewController.swift */; };
 		7D81696C26182BA200F37996 /* ChatRoomTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D81696B26182BA200F37996 /* ChatRoomTableViewCell.xib */; };
 		7D81697126182CC400F37996 /* ChatRoomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D81697026182CC400F37996 /* ChatRoomTableViewCell.swift */; };
+		7D81697E2618641C00F37996 /* ChatInputAccessaryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7D81697D2618641C00F37996 /* ChatInputAccessaryView.xib */; };
+		7D8169832618652F00F37996 /* ChatInputAccessaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8169822618652F00F37996 /* ChatInputAccessaryView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +63,8 @@
 		7D816965261824CD00F37996 /* ChatRoomViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomViewController.swift; sourceTree = "<group>"; };
 		7D81696B26182BA200F37996 /* ChatRoomTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChatRoomTableViewCell.xib; sourceTree = "<group>"; };
 		7D81697026182CC400F37996 /* ChatRoomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomTableViewCell.swift; sourceTree = "<group>"; };
+		7D81697D2618641C00F37996 /* ChatInputAccessaryView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ChatInputAccessaryView.xib; sourceTree = "<group>"; };
+		7D8169822618652F00F37996 /* ChatInputAccessaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInputAccessaryView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,6 +178,8 @@
 			children = (
 				7D81696B26182BA200F37996 /* ChatRoomTableViewCell.xib */,
 				7D81697026182CC400F37996 /* ChatRoomTableViewCell.swift */,
+				7D81697D2618641C00F37996 /* ChatInputAccessaryView.xib */,
+				7D8169822618652F00F37996 /* ChatInputAccessaryView.swift */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -283,6 +289,7 @@
 			files = (
 				7D81696C26182BA200F37996 /* ChatRoomTableViewCell.xib in Resources */,
 				7D795827260EF335006C7D69 /* LaunchScreen.storyboard in Resources */,
+				7D81697E2618641C00F37996 /* ChatInputAccessaryView.xib in Resources */,
 				7D795824260EF335006C7D69 /* Assets.xcassets in Resources */,
 				7D8169322617F25F00F37996 /* ChatList.storyboard in Resources */,
 				7D81695D2618243700F37996 /* ChatRoom.storyboard in Resources */,
@@ -310,6 +317,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D8169832618652F00F37996 /* ChatInputAccessaryView.swift in Sources */,
 				7D81697126182CC400F37996 /* ChatRoomTableViewCell.swift in Sources */,
 				7D81693C2617F97600F37996 /* ChatListTableViewCell.swift in Sources */,
 				7D79581B260EF333006C7D69 /* AppDelegate.swift in Sources */,
