@@ -48,6 +48,58 @@ final class SignUpViewController: UIViewController {
     }
 
     @IBAction func tappedRegisterButton(_ sender: Any) {
+        guard  let image = profileButton.imageView?.image,
+               let uploadImage = image.jpegData(compressionQuality: 0.3)  else {
+            return
+        }
+        let fileName = NSUUID().uuidString
+        let storageRef = Storage.storage().reference().child("profile_image").child(fileName)
+        storageRef.putData(uploadImage, metadata: nil) { metadata, error in
+            if let error = error {
+                print("画像のストレージの保存に失敗しました。\(error)")
+                let alert = UIAlertController(title: "画像のストレージ保存に失敗", message: "画像のストレージ保存に失敗しました", preferredStyle: .alert)
+                let yesAction = UIAlertAction(title: "はい", style: .default, handler: { (UIAlertAction) in
+                    print("「はい」が選択されました！")
+                })
+                let noAction = UIAlertAction(title: "いいえ", style: .default, handler: { (UIAlertAction) in
+                    print("「いいえ」が選択されました！")
+                })
+                alert.addAction(noAction)
+                alert.addAction(yesAction)
+                self.present(alert, animated: true)
+
+                return
+            }
+            storageRef.downloadURL { (url, error) in
+                if let error = error {
+                    print("firestorageからのダウンロードに失敗しました。\(error)")
+                    let arert = UIAlertController(title: "ダウンロードに失敗しました", message: "画像のダウンロードに失敗", preferredStyle: .alert)
+                    self.present(arert, animated: true)
+                    return
+                }
+                guard let urlString = url?.absoluteString else {
+                    return
+                }
+
+                self.createUserToFirestore(url: urlString)
+            }
+
+        }
+    }
+
+    @IBOutlet weak var alreadyHaveAccountButton: UIButton!
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+
+    @objc private func tappedProfileButton() {
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.delegate = self
+        imagePickerController.allowsEditing = true
+        self.present(imagePickerController, animated: true)
+    }
+
+    private func createUserToFirestore(url: String) {
         guard let email = emailTextFiled.text,
               let password = passwordTextFiled.text,
               let userName = usernameTextFiled.text else
@@ -64,6 +116,7 @@ final class SignUpViewController: UIViewController {
             let docdata: [String : Any] = [
                 "email" : email,
                 "username" : userName,
+                "imageUrl" : url,
                 "createdAt" : Timestamp()
             ]
 
@@ -77,18 +130,6 @@ final class SignUpViewController: UIViewController {
                 self.dismiss(animated: true)
             }
         }
-    }
-
-    @IBOutlet weak var alreadyHaveAccountButton: UIButton!
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-
-    @objc private func tappedProfileButton() {
-        let imagePickerController = UIImagePickerController()
-        imagePickerController.delegate = self
-        imagePickerController.allowsEditing = true
-        self.present(imagePickerController, animated: true)
     }
 }
 

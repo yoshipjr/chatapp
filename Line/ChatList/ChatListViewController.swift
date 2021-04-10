@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
 final class ChatListViewController: UIViewController {
 
@@ -28,9 +29,28 @@ final class ChatListViewController: UIViewController {
 
         let stroyBoard = UIStoryboard(name: "SignUp", bundle: nil)
         let signUpViewController = stroyBoard.instantiateViewController(withIdentifier: "SignUpViewController") as! SignUpViewController
+        signUpViewController.modalPresentationStyle = .fullScreen
         self.present(signUpViewController, animated: true)
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchUserInfoFromFirestore()
+    }
+
+    private func fetchUserInfoFromFirestore() {
+        Firestore.firestore().collection("users").getDocuments { (snapshot, error) in
+            if let error = error {
+                print("user情報の取得に失敗しました。\(error)")
+
+            }
+            snapshot?.documents.forEach({ (snapshot) in
+                let data = snapshot.data()
+                print("data:", data)
+            })
+
+        }
+    }
 
 }
 
