@@ -6,6 +6,9 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseFirestore
+import FirebaseAuth
 
 final class SignUpViewController: UIViewController {
 
@@ -14,7 +17,7 @@ final class SignUpViewController: UIViewController {
             profileButton.layer.cornerRadius = 85
             profileButton.layer.borderWidth = 1
             profileButton.layer.borderColor = UIColor.rgb(red: 240, green: 240, blue: 240).cgColor
-            profileButton.isEnabled = false
+            profileButton.isEnabled = true
             profileButton.addTarget(self, action: #selector(tappedProfileButton), for: .touchUpInside)
         }
     }
@@ -41,6 +44,38 @@ final class SignUpViewController: UIViewController {
     @IBOutlet weak var registerButton: UIButton! {
         didSet {
             registerButton.layer.cornerRadius = 15
+        }
+    }
+
+    @IBAction func tappedRegisterButton(_ sender: Any) {
+        guard let email = emailTextFiled.text,
+              let password = passwordTextFiled.text,
+              let userName = usernameTextFiled.text else
+        {
+            return
+        }
+
+        Auth.auth().createUser(withEmail: email, password: password) { (response, err) in
+            if let err =  err {
+                print("auth情報の保存に失敗しました:", err)
+            }
+
+
+            let docdata: [String : Any] = [
+                "email" : email,
+                "username" : userName,
+                "createdAt" : Timestamp()
+            ]
+
+            guard let uid = response?.user.uid else { return }
+            Firestore.firestore().collection("users").document(uid).setData(docdata) { (err) in
+                if let err = err {
+                    print("データベースへの保存に失敗しました。", err)
+                    return
+                }
+                print("データベースへの保存に成功しました")
+                self.dismiss(animated: true)
+            }
         }
     }
 
@@ -83,10 +118,10 @@ extension SignUpViewController: UITextFieldDelegate {
         let isPaswordEmpty = passwordTextFiled.text?.isEmpty ?? false
         let isUsernameEmpty = usernameTextFiled.text?.isEmpty ?? false
         if isEmailEmpty || isPaswordEmpty || isUsernameEmpty {
-            registerButton.isEnabled = true
+            registerButton.isEnabled = false
             registerButton.backgroundColor = .rgb(red: 100, green: 100, blue: 100)
         } else {
-            registerButton.isEnabled = false
+            registerButton.isEnabled = true
             registerButton.backgroundColor = .rgb(red: 0, green: 100, blue: 100)
         }
     }
