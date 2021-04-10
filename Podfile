@@ -7,6 +7,9 @@ target 'Line' do
 
   # Pods for Line
   pod 'Firebase/Analytics'
+  pod 'Firebase/Auth'
+  pod 'Firebase/Storage'
+  pod 'Firebase/Firestore'
 
   target 'LineTests' do
     inherit! :search_paths
