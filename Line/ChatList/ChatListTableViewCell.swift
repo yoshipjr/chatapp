@@ -6,13 +6,17 @@
 //
 
 import UIKit
+import Nuke
 
 class ChatListTableViewCell: UITableViewCell {
 
-    var user: User? {
+    var chatRoom: ChatRoom? {
         didSet {
-            partnerLabel.text = user?.userName
-            dataLabel.text = dataFormatForDatelabel(date: user?.createdAt.dateValue() ?? Date())
+            partnerLabel.text = chatRoom?.partnerUser?.userName
+            guard let url = URL(string: chatRoom?.partnerUser?.profileImageUrl ?? "") else { return }
+            Nuke.loadImage(with: url, into: userImageView)
+
+            dataLabel.text = chatRoom?.createdAt.dateValue().dateFormatterForDateLabel
         }
     }
 
