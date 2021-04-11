@@ -12,6 +12,7 @@
 		7D72F9942621CBD500A41C32 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D72F9932621CBD400A41C32 /* User.swift */; };
 		7D72F99D2621EAB200A41C32 /* UserListViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D72F99C2621EAB100A41C32 /* UserListViewController.storyboard */; };
 		7D72F9A52621EC5C00A41C32 /* UserListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D72F9A42621EC5C00A41C32 /* UserListViewController.swift */; };
+		7D72F9AA2621F90800A41C32 /* UserListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D72F9A92621F90800A41C32 /* UserListTableViewCell.swift */; };
 		7D79581B260EF333006C7D69 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D79581A260EF333006C7D69 /* AppDelegate.swift */; };
 		7D79581D260EF333006C7D69 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D79581C260EF333006C7D69 /* SceneDelegate.swift */; };
 		7D795824260EF335006C7D69 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7D795823260EF335006C7D69 /* Assets.xcassets */; };
@@ -61,6 +62,7 @@
 		7D72F9932621CBD400A41C32 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		7D72F99C2621EAB100A41C32 /* UserListViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = UserListViewController.storyboard; sourceTree = "<group>"; };
 		7D72F9A42621EC5C00A41C32 /* UserListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListViewController.swift; sourceTree = "<group>"; };
+		7D72F9A92621F90800A41C32 /* UserListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListTableViewCell.swift; sourceTree = "<group>"; };
 		7D795817260EF333006C7D69 /* Line.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Line.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D79581A260EF333006C7D69 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7D79581C260EF333006C7D69 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 			children = (
 				7D72F99C2621EAB100A41C32 /* UserListViewController.storyboard */,
 				7D72F9A42621EC5C00A41C32 /* UserListViewController.swift */,
+				7D72F9A92621F90800A41C32 /* UserListTableViewCell.swift */,
 			);
 			path = UserList;
 			sourceTree = "<group>";
@@ -524,6 +527,7 @@
 				7D8169832618652F00F37996 /* ChatInputAccessaryView.swift in Sources */,
 				7D81697126182CC400F37996 /* ChatRoomTableViewCell.swift in Sources */,
 				7D81693C2617F97600F37996 /* ChatListTableViewCell.swift in Sources */,
+				7D72F9AA2621F90800A41C32 /* UserListTableViewCell.swift in Sources */,
 				7D8169A42618A85C00F37996 /* FirebaseManager.swift in Sources */,
 				7D8169B32618ADC600F37996 /* SignUpViewController.swift in Sources */,
 				7D72F9A52621EC5C00A41C32 /* UserListViewController.swift in Sources */,

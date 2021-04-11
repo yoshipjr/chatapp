@@ -12,7 +12,11 @@ import FirebaseAuth
 final class ChatListViewController: UIViewController {
 
     private let cellId: String = "cellId"
-    private var users: [User] = [User]()
+    private var user: User? {
+        didSet {
+            navigationItem.title = user?.userName
+        }
+    }
 
     @IBOutlet weak var chatListTableView: UITableView! {
         didSet {
@@ -23,10 +27,19 @@ final class ChatListViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.barTintColor = .rgb(red: 39, green: 49, blue: 69)
-        navigationItem.title = "トーク"
-        navigationController?.navigationBar.titleTextAttributes = [ .foregroundColor: UIColor.white]
+        setupViews()
+        confirmLoggedInUser()
+        fetchLoginUserInfo()
+    }
 
+    @objc private func tappedChatButton() {
+        let storyBoard = UIStoryboard.init(name: "UserListViewController", bundle: nil)
+        let vc = storyBoard.instantiateViewController(identifier: "UserListViewController")
+        let nav = UINavigationController(rootViewController: vc)
+        self.present(nav, animated: true)
+    }
+
+    private func confirmLoggedInUser() {
         if Auth.auth().currentUser?.uid == nil {
             let stroyBoard = UIStoryboard(name: "SignUp", bundle: nil)
             let signUpViewController = stroyBoard.instantiateViewController(withIdentifier: "SignUpViewController") as! SignUpViewController
@@ -35,29 +48,35 @@ final class ChatListViewController: UIViewController {
         }
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        fetchUserInfoFromFirestore()
+    private func setupViews() {
+        navigationController?.navigationBar.barTintColor = .rgb(red: 39, green: 49, blue: 69)
+        navigationItem.title = "トーク"
+        navigationController?.navigationBar.titleTextAttributes = [ .foregroundColor: UIColor.white]
+
+        let rightButton = UIBarButtonItem(title: "新規チャット", style: .plain, target: self, action: #selector(tappedChatButton))
+
+        navigationItem.rightBarButtonItem = rightButton
+        navigationItem.rightBarButtonItem?.tintColor = .white
     }
 
-    private func fetchUserInfoFromFirestore() {
-        Firestore.firestore().collection("users").getDocuments { (snapshot, error) in
-            if let error = error {
-                print("user情報の取得に失敗しました。\(error)")
-
+    private func fetchLoginUserInfo() {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            return
             }
-            snapshot?.documents.forEach({ (snapshot) in
-                let data = snapshot.data()
-                let user: User = User(dic: data)
+        Firestore.firestore().collection("users").document(uid).getDocument { (snapshot, error) in
+            if let error = error {
+                print("ユーザー情報の取得に失敗しました。\(error)")
+            }
 
-                self.users.append(user)
-                self.chatListTableView.reloadData()
+            guard
+                let snapshot = snapshot,
+                let data = snapshot.data() else
+            {
+                return
+            }
 
-                self.users.forEach { (user) in
-                    print("user:", user.userName)
-                }
-            })
-
+            let user = User(dic: data)
+            self.user = user
         }
     }
 
@@ -65,12 +84,11 @@ final class ChatListViewController: UIViewController {
 
 extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return users.count
+        return 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = chatListTableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! ChatListTableViewCell
-        cell.user = users[indexPath.row]
 
         return cell
     }

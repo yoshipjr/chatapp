@@ -10,6 +10,7 @@ target 'Line' do
   pod 'Firebase/Auth'
   pod 'Firebase/Storage'
   pod 'Firebase/Firestore'
+  pod 'Nuke'
 
   target 'LineTests' do
     inherit! :search_paths
