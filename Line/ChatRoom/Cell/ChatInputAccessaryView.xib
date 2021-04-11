@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ChatInputAccessaryView" customModule="Line" customModuleProvider="target">
+            <connections>
+                <outlet property="chatTextView" destination="WcZ-YD-4Mp" id="d21-x8-GM8"/>
+                <outlet property="sendButton" destination="Nde-2s-Scg" id="tRn-cJ-XBM"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="447" height="439"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Nde-2s-Scg">
+                    <rect key="frame" x="422" y="210.5" width="15" height="28"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="23"/>
+                    <state key="normal" image="send_icon"/>
+                    <connections>
+                        <action selector="tappedSendButton:" destination="-1" eventType="touchUpInside" id="Aca-sj-7Fd"/>
+                    </connections>
+                </button>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="249" scrollEnabled="NO" text="ここにメッセージがはいります" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="WcZ-YD-4Mp">
+                    <rect key="frame" x="10" y="54" width="402" height="341"/>
+                    <color key="backgroundColor" systemColor="systemGray4Color"/>
+                    <color key="textColor" systemColor="labelColor"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                </textView>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="Nde-2s-Scg" firstAttribute="leading" secondItem="WcZ-YD-4Mp" secondAttribute="trailing" constant="10" id="1f9-q5-Dgc"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="WcZ-YD-4Mp" secondAttribute="bottom" constant="10" id="CVZ-gX-zxd"/>
+                <constraint firstItem="WcZ-YD-4Mp" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" constant="10" id="Yfr-hJ-41C"/>
+                <constraint firstItem="Nde-2s-Scg" firstAttribute="centerY" secondItem="WcZ-YD-4Mp" secondAttribute="centerY" id="Z25-y9-9SO"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="Nde-2s-Scg" secondAttribute="trailing" constant="10" id="seK-Y2-rg1"/>
+                <constraint firstItem="WcZ-YD-4Mp" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="10" id="zrd-sN-9q6"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="161.59420289855075" y="-73.325892857142847"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="send_icon" width="15" height="15"/>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray4Color">
+            <color red="0.81960784313725488" green="0.81960784313725488" blue="0.83921568627450982" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>
