@@ -17,7 +17,7 @@ struct ChatRoom {
 
     init(dic: [String: Any]) {
         self.latestMessageId = dic["latestMessageId"] as? String ?? ""
-        self.memebers = dic["memebers"] as? [String] ?? [String]()
-        self.createdAt = dic["createdAt"] as? Timestamp ?? Timestamp()
+        self.memebers = dic["members"] as? [String] ?? [String]()
+        self.createdAt = dic["creagedAt"] as? Timestamp ?? Timestamp()
     }
 }

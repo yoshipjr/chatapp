@@ -18,38 +18,6 @@
             endingLineNumber = "15"
             landmarkName = "chatRoom"
             landmarkType = "24">
-            <Locations>
-               <Location
-                  uuid = "2B53860D-F493-460E-9FF7-E634722F97C9 - b81ac40ee490dc3"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Line.ChatListTableViewCell.init(style: __C.UITableViewCellStyle, reuseIdentifier: Swift.Optional&lt;Swift.String&gt;) -&gt; Line.ChatListTableViewCell"
-                  moduleName = "Line"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kitaharayoshihisa/projects/iosapp/Line/Line/ChatList/ChatListTableViewCell.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "19"
-                  endingLineNumber = "19"
-                  offsetFromSymbolStart = "280">
-               </Location>
-               <Location
-                  uuid = "2B53860D-F493-460E-9FF7-E634722F97C9 - 275ef627a9301754"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Line.ChatListTableViewCell.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;Line.ChatListTableViewCell&gt;"
-                  moduleName = "Line"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/kitaharayoshihisa/projects/iosapp/Line/Line/ChatList/ChatListTableViewCell.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "19"
-                  endingLineNumber = "19"
-                  offsetFromSymbolStart = "221">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
