@@ -39,21 +39,46 @@
                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Pdt-pK-q5e" userLabel="Mymessage Text View">
+                        <rect key="frame" x="184" y="25" width="225" height="84"/>
+                        <color key="backgroundColor" systemColor="systemGreenColor"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="225" id="Yze-yO-E1b"/>
+                        </constraints>
+                        <color key="textColor" systemColor="labelColor"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                    </textView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k6P-ch-ZAM">
+                        <rect key="frame" x="140" y="87" width="36" height="17"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="Pdt-pK-q5e" firstAttribute="leading" secondItem="k6P-ch-ZAM" secondAttribute="trailing" constant="8" id="6AA-0z-E0U"/>
                     <constraint firstItem="dZW-sq-k2x" firstAttribute="leading" secondItem="KUY-D3-JwX" secondAttribute="trailing" constant="10" id="DyF-2D-jVO"/>
                     <constraint firstItem="KUY-D3-JwX" firstAttribute="top" secondItem="U8q-eY-6yk" secondAttribute="top" constant="25" id="QfH-ZG-Cbl"/>
                     <constraint firstItem="wOm-fJ-pm9" firstAttribute="centerY" secondItem="U8q-eY-6yk" secondAttribute="centerY" id="Qzv-bQ-xfp"/>
                     <constraint firstItem="KUY-D3-JwX" firstAttribute="bottom" secondItem="dZW-sq-k2x" secondAttribute="bottom" constant="10" id="V6F-31-eWY"/>
                     <constraint firstItem="wOm-fJ-pm9" firstAttribute="leading" secondItem="U8q-eY-6yk" secondAttribute="leading" constant="15" id="VlN-Oy-ord"/>
+                    <constraint firstItem="Pdt-pK-q5e" firstAttribute="bottom" secondItem="KUY-D3-JwX" secondAttribute="bottom" id="WFW-SC-Omx"/>
+                    <constraint firstAttribute="bottom" secondItem="k6P-ch-ZAM" secondAttribute="bottom" constant="30" id="c7w-nA-hxd"/>
                     <constraint firstItem="KUY-D3-JwX" firstAttribute="leading" secondItem="wOm-fJ-pm9" secondAttribute="trailing" constant="10" id="ebE-xg-Qqx"/>
+                    <constraint firstItem="Pdt-pK-q5e" firstAttribute="top" secondItem="U8q-eY-6yk" secondAttribute="top" constant="25" id="hiO-1a-ohe"/>
+                    <constraint firstAttribute="trailing" secondItem="Pdt-pK-q5e" secondAttribute="trailing" constant="20" id="rG3-Uc-2UK"/>
                     <constraint firstAttribute="bottom" secondItem="KUY-D3-JwX" secondAttribute="bottom" constant="25" id="wJj-iJ-4qa"/>
                 </constraints>
             </tableViewCellContentView>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
-                <outlet property="dateLabel" destination="dZW-sq-k2x" id="DoH-BV-xo8"/>
-                <outlet property="messageTextView" destination="KUY-D3-JwX" id="Kbk-xG-rl7"/>
-                <outlet property="messageTextViewConstraint" destination="4XC-T1-Dff" id="AaH-DY-79n"/>
+                <outlet property="myDateLabel" destination="k6P-ch-ZAM" id="xeG-kM-48M"/>
+                <outlet property="myMessageTextView" destination="Pdt-pK-q5e" id="Jky-Bf-Nmo"/>
+                <outlet property="myMessageTextvViewConstraint" destination="Yze-yO-E1b" id="uza-vC-rKL"/>
+                <outlet property="parnerDateLabel" destination="dZW-sq-k2x" id="DoH-BV-xo8"/>
+                <outlet property="partnerMessageTextView" destination="KUY-D3-JwX" id="Kbk-xG-rl7"/>
+                <outlet property="partnerMessageTextViewConstraint" destination="4XC-T1-Dff" id="AaH-DY-79n"/>
                 <outlet property="userImageView" destination="wOm-fJ-pm9" id="WqW-NE-V3r"/>
             </connections>
             <point key="canvasLocation" x="264.49275362318843" y="56.919642857142854"/>
@@ -66,6 +91,9 @@
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGreenColor">
+            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
