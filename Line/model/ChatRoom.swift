@@ -14,6 +14,7 @@ struct ChatRoom {
     let createdAt: Timestamp
 
     var partnerUser: User?
+    var documentId: String?
 
     init(dic: [String: Any]) {
         self.latestMessageId = dic["latestMessageId"] as? String ?? ""
