@@ -39,51 +39,59 @@ final class ChatListViewController: UIViewController {
                     break
             }
         }
+        fetchChatRoomsInfoFromFirestore()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        Firestore.firestore().collection("chatRooms").getDocuments { (snapshots, err) in
-            if let err = err {
-                print("ChatRooms情報の取得に失敗しました。\(err)")
-                return
-            }
-
-            snapshots?.documents.forEach({ (snapshot) in
-                let dic = snapshot.data()
-                var chatroom = ChatRoom(dic: dic)
-
-                guard let uid = Auth.auth().currentUser?.uid else { return }
-                chatroom.memebers.forEach { (memberUid) in
-                    if memberUid != uid {
-                        Firestore.firestore().collection("users").document(memberUid).getDocument { (snaoshot, err) in
-                            if let err = err {
-                                print("ユーザー情報の取得に失敗しました。\(err)")
-                                return
-                            }
-
-                            guard let dic = snaoshot?.data() else { return }
-                            var user = User(dic: dic)
-                            user.uid = snapshot.documentID
-
-                            chatroom.partnerUser = user
-                            self.chatRooms.append(chatroom)
-                            print("self.chatroooms.count: ", self.chatRooms.count)
-                            self.chatListTableView.reloadData()
-                        }
-                    }
+    private func fetchChatRoomsInfoFromFirestore() {
+        Firestore.firestore().collection("chatRooms")
+            .addSnapshotListener { (snapshots, err) in
+                if let err = err {
+                    print("ChatRooms情報の取得に失敗しました。\(err)")
+                    return
                 }
-            })
-        }
+                snapshots?.documentChanges.forEach({ (documentChange) in
+                    switch documentChange.type {
+                        case .added:
+                            self.handleAddedDocumentChanged(documentChange)
+                        case .modified:
+                            break
+                        case .removed:
+                            break
+                    }
+                })
+            }
+    }
 
+    private func handleAddedDocumentChanged(_ documentChange: DocumentChange ) {
+        let dic = documentChange.document.data()
+        var chatroom = ChatRoom(dic: dic)
+
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        chatroom.memebers.forEach { (memberUid) in
+            if memberUid != uid {
+                Firestore.firestore().collection("users").document(memberUid).getDocument { (snaoshot, err) in
+                    if let err = err {
+                        print("ユーザー情報の取得に失敗しました。\(err)")
+                        return
+                    }
+
+                    guard let dic = snaoshot?.data() else { return }
+                    var user = User(dic: dic)
+                    user.uid = documentChange.document.documentID
+
+                    chatroom.partnerUser = user
+                    self.chatRooms.append(chatroom)
+                    print("self.chatroooms.count: ", self.chatRooms.count)
+                    self.chatListTableView.reloadData()
+                }
+            }
+        }
     }
 
     @objc private func tappedChatButton() {
         let storyBoard = UIStoryboard.init(name: "UserListViewController", bundle: nil)
         let vc = storyBoard.instantiateViewController(identifier: "UserListViewController")
         let nav = UINavigationController(rootViewController: vc)
-        nav.modalPresentationStyle = .fullScreen
         self.present(nav, animated: true)
     }
 
@@ -108,24 +116,6 @@ final class ChatListViewController: UIViewController {
     }
 
     private func fetchLoginUserInfo() {
-//        guard let uid = Auth.auth().currentUser?.uid else {
-//            return
-//            }
-//        Firestore.firestore().collection("users").document(uid).getDocument { (snapshot, error) in
-//            if let error = error {
-//                print("ユーザー情報の取得に失敗しました。\(error)")
-//            }
-//
-//            guard
-//                let snapshot = snapshot,
-//                let data = snapshot.data() else
-//            {
-//                return
-//            }
-//
-//            let user = User(dic: data)
-//            self.user = user
-//        }
         FirestoreManager.shared.fetchLoginUserInfo { (result) in
             switch result {
                 case .success(let user):
