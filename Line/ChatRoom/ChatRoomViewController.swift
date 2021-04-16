@@ -95,9 +95,6 @@ extension ChatRoomViewController: UITableViewDelegate, UITableViewDataSource {
 
 extension ChatRoomViewController: ChatInputAccessaryViewDelegate {
     func tappedSendButton(text: String) {
-//        self.chatInputAccessaryView.removeText()
-//        self.messeages.append(text)
-//        self.chatRoomTableView.reloadData()
         guard
             let chatroomDocId = chatRoom?.documentId,
             let name = user?.userName,
