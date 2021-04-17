@@ -17,12 +17,7 @@ extension UIViewController {
 
     func showSimpleAlert(title: String, message: String, completion: (() -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let yesAction = UIAlertAction(title: "はい", style: .default, handler: { (UIAlertAction) in
-        })
-        let noAction = UIAlertAction(title: "いいえ", style: .default, handler: { (UIAlertAction) in
-            print("「いいえ」が選択されました！")
-        })
-        alert.addAction(noAction)
+        let yesAction = UIAlertAction(title: "はい", style: .default)
         alert.addAction(yesAction)
         self.present(alert, animated: true)
     }

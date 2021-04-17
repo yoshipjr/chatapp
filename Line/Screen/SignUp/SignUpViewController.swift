@@ -9,7 +9,6 @@ import UIKit
 import Firebase
 import FirebaseFirestore
 import FirebaseAuth
-import PKHUD
 
 final class SignUpViewController: UIViewController {
 
@@ -52,13 +51,13 @@ final class SignUpViewController: UIViewController {
         guard let uploadImage = image?.jpegData(compressionQuality: 0.3)  else {
             return
         }
-        HUD.show(.progress)
+        HUDManager.shared.show()
         let fileName = NSUUID().uuidString
         let storageRef = Storage.storage().reference().child("profile_image").child(fileName)
         storageRef.putData(uploadImage, metadata: nil) { metadata, error in
             if let error = error {
                 print("画像のストレージの保存に失敗しました。\(error)")
-                HUD.hide()
+                HUDManager.shared.hide()
                 let alert = UIAlertController(title: "画像のストレージ保存に失敗", message: "画像のストレージ保存に失敗しました", preferredStyle: .alert)
                 let yesAction = UIAlertAction(title: "はい", style: .default, handler: { (UIAlertAction) in
                     print("「はい」が選択されました！")
@@ -77,7 +76,7 @@ final class SignUpViewController: UIViewController {
                     print("firestorageからのダウンロードに失敗しました。\(error)")
                     let arert = UIAlertController(title: "ダウンロードに失敗しました", message: "画像のダウンロードに失敗", preferredStyle: .alert)
                     self.present(arert, animated: true)
-                    HUD.hide()
+                    HUDManager.shared.hide()
                     return
                 }
                 guard let urlString = url?.absoluteString else {
@@ -133,7 +132,7 @@ final class SignUpViewController: UIViewController {
         Auth.auth().createUser(withEmail: email, password: password) { (response, err) in
             if let err =  err {
                 print("auth情報の保存に失敗しました:", err)
-                HUD.hide()
+                HUDManager.shared.hide()
                 return
             }
 
@@ -149,11 +148,11 @@ final class SignUpViewController: UIViewController {
             Firestore.firestore().collection("users").document(uid).setData(docdata) { (err) in
                 if let err = err {
                     print("データベースへの保存に失敗しました。", err)
-                    HUD.hide()
+                    HUDManager.shared.hide()
                     return
                 }
                 print("データベースへの保存に成功しました")
-                HUD.hide()
+                HUDManager.shared.hide()
                 self.dismiss(animated: true)
             }
         }

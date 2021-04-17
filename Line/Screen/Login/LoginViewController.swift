@@ -7,7 +7,6 @@
 
 import UIKit
 import Firebase
-import PKHUD
 
 final class LoginViewController: UIViewController {
 
@@ -39,13 +38,14 @@ final class LoginViewController: UIViewController {
         {
             return
         }
-        HUD.show(.progress)
+        HUDManager.shared.show()
         Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
             if let error = error {
-                HUD.hide()
+                HUDManager.shared.hide()
+                self.showSimpleAlert(title: "ログインに失敗", message: error.localizedDescription)
                 return
             }
-            HUD.hide()
+            HUDManager.shared.hide()
             print("ログインに成功しました")
             let nav = self.presentingViewController as! UINavigationController
             let chatlistViewController = nav.viewControllers[nav.viewControllers.count - 1] as? ChatListViewController

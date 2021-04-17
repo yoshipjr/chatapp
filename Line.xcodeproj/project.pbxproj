@@ -40,6 +40,7 @@
 		7DCC3B61262AAF870047FF17 /* LoginViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7DCC3B60262AAF870047FF17 /* LoginViewController.storyboard */; };
 		7DCC3B6A262AB1AC0047FF17 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCC3B69262AB1AC0047FF17 /* LoginViewController.swift */; };
 		7DCC3B90262AE8200047FF17 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCC3B8F262AE8200047FF17 /* UIView+Extension.swift */; };
+		7DCC3BB2262AEDCB0047FF17 /* HUDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCC3BB1262AEDCB0047FF17 /* HUDManager.swift */; };
 		B57E4D9F74ACB8D0736F6A02 /* Pods_Line_LineUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC98BC0E50F9C203D173537F /* Pods_Line_LineUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -103,6 +104,7 @@
 		7DCC3B60262AAF870047FF17 /* LoginViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LoginViewController.storyboard; sourceTree = "<group>"; };
 		7DCC3B69262AB1AC0047FF17 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		7DCC3B8F262AE8200047FF17 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
+		7DCC3BB1262AEDCB0047FF17 /* HUDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDManager.swift; sourceTree = "<group>"; };
 		9ACB060CAECDA09329ED81FD /* Pods_Line.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Line.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9A9A0067D02A173F24AA718 /* Pods-LineTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LineTests.release.xcconfig"; path = "Target Support Files/Pods-LineTests/Pods-LineTests.release.xcconfig"; sourceTree = "<group>"; };
 		BC98BC0E50F9C203D173537F /* Pods_Line_LineUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Line_LineUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -273,6 +275,7 @@
 			isa = PBXGroup;
 			children = (
 				7D8169A32618A85B00F37996 /* FirebaseManager.swift */,
+				7DCC3BB1262AEDCB0047FF17 /* HUDManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -581,6 +584,7 @@
 				7D81694C26181F3500F37996 /* UIColor+Extension.swift in Sources */,
 				7D816966261824CD00F37996 /* ChatRoomViewController.swift in Sources */,
 				7D72F9942621CBD500A41C32 /* User.swift in Sources */,
+				7DCC3BB2262AEDCB0047FF17 /* HUDManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
