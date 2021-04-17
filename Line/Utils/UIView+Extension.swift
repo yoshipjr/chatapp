@@ -10,11 +10,6 @@ import UIKit
 
 extension UIViewController {
 
-    enum Handler {
-        case success
-        case failure
-    }
-
     func showSimpleAlert(title: String, message: String, completion: (() -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let yesAction = UIAlertAction(title: "はい", style: .default)

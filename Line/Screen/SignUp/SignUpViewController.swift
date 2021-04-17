@@ -56,19 +56,8 @@ final class SignUpViewController: UIViewController {
         let storageRef = Storage.storage().reference().child("profile_image").child(fileName)
         storageRef.putData(uploadImage, metadata: nil) { metadata, error in
             if let error = error {
-                print("画像のストレージの保存に失敗しました。\(error)")
                 HUDManager.shared.hide()
-                let alert = UIAlertController(title: "画像のストレージ保存に失敗", message: "画像のストレージ保存に失敗しました", preferredStyle: .alert)
-                let yesAction = UIAlertAction(title: "はい", style: .default, handler: { (UIAlertAction) in
-                    print("「はい」が選択されました！")
-                })
-                let noAction = UIAlertAction(title: "いいえ", style: .default, handler: { (UIAlertAction) in
-                    print("「いいえ」が選択されました！")
-                })
-                alert.addAction(noAction)
-                alert.addAction(yesAction)
-                self.present(alert, animated: true)
-
+                self.showSimpleAlert(title: "画像のストレージ保存に失敗", message: error.localizedDescription)
                 return
             }
             storageRef.downloadURL { (url, error) in
@@ -83,7 +72,12 @@ final class SignUpViewController: UIViewController {
                     return
                 }
 
-                self.createUserToFirestore(url: urlString)
+                guard let email = self.emailTextFiled.text, let pasword = self.passwordTextFiled.text, let username = self.usernameTextFiled.text else { return }
+
+                FirestoreManager.shared.createUserToFirestore(email: email, password: pasword, userName: username, url: urlString) {
+                    HUDManager.shared.hide()
+                    self.dismiss(animated: true)
+                }
             }
 
         }
@@ -119,43 +113,6 @@ final class SignUpViewController: UIViewController {
         let storyboard = UIStoryboard.init(name: "LoginViewController", bundle: nil)
         let loginViewController = storyboard.instantiateViewController(withIdentifier: "LoginViewController")
         navigationController?.pushViewController(loginViewController, animated: true)
-    }
-
-    private func createUserToFirestore(url: String) {
-        guard let email = emailTextFiled.text,
-              let password = passwordTextFiled.text,
-              let userName = usernameTextFiled.text else
-        {
-            return
-        }
-
-        Auth.auth().createUser(withEmail: email, password: password) { (response, err) in
-            if let err =  err {
-                print("auth情報の保存に失敗しました:", err)
-                HUDManager.shared.hide()
-                return
-            }
-
-
-            let docdata: [String : Any] = [
-                "email" : email,
-                "username" : userName,
-                "imageUrl" : url,
-                "createdAt" : Timestamp()
-            ]
-
-            guard let uid = response?.user.uid else { return }
-            Firestore.firestore().collection("users").document(uid).setData(docdata) { (err) in
-                if let err = err {
-                    print("データベースへの保存に失敗しました。", err)
-                    HUDManager.shared.hide()
-                    return
-                }
-                print("データベースへの保存に成功しました")
-                HUDManager.shared.hide()
-                self.dismiss(animated: true)
-            }
-        }
     }
 }
 

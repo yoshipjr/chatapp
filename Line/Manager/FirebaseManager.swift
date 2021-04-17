@@ -1,5 +1,5 @@
 import Firebase
-
+import UIKit
 
 final class FirestoreManager {
 
@@ -71,6 +71,36 @@ final class FirestoreManager {
                 }
             })
         }
+    }
+
+    func createUserToFirestore(email: String, password: String, userName: String, url: String, successHandler: @escaping () -> Void ) {
+        auth.createUser(withEmail: email, password: password) { (response, err) in
+            if let err =  err {
+                print("auth情報の保存に失敗しました:", err)
+                HUDManager.shared.hide()
+                return
+            }
+
+
+            let docdata: [String : Any] = [
+                "email" : email,
+                "username" : userName,
+                "imageUrl" : url,
+                "createdAt" : Timestamp()
+            ]
+
+            guard let uid = response?.user.uid else { return }
+            self.firestore.collection("users").document(uid).setData(docdata) { (err) in
+                if let err = err {
+                    print("データベースへの保存に失敗しました。", err)
+                    HUDManager.shared.hide()
+                    return
+                }
+                print("データベースへの保存に成功しました")
+                successHandler()
+            }
+        }
+
     }
 }
 
