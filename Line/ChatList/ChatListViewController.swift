@@ -73,20 +73,36 @@ final class ChatListViewController: UIViewController {
         if !isContain { return }
         chatroom.memebers.forEach { (memberUid) in
             if memberUid != uid {
-                Firestore.firestore().collection("users").document(memberUid).getDocument { (snaoshot, err) in
+                Firestore.firestore().collection("users").document(memberUid).getDocument { (userSnapshot, err) in
                     if let err = err {
                         print("ユーザー情報の取得に失敗しました。\(err)")
                         return
                     }
 
-                    guard let dic = snaoshot?.data() else { return }
+                    guard let dic = userSnapshot?.data()
+                    else { return }
+
                     var user = User(dic: dic)
                     user.uid = documentChange.document.documentID
-
+                    let latestMessageId = chatroom.latestMessageId
                     chatroom.partnerUser = user
-                    self.chatRooms.append(chatroom)
-                    print("self.chatroooms.count: ", self.chatRooms.count)
-                    self.chatListTableView.reloadData()
+
+                    if latestMessageId == "" {
+                        self.chatRooms.append(chatroom)
+                        self.chatListTableView.reloadData()
+                        return
+                    }
+
+                    Firestore.firestore().collection("chatRooms").document(chatroom.documentId ?? "" ).collection("messages").document(latestMessageId).getDocument { (messageSnapshot, error) in
+                        if let error = error {
+                            print("最新情報の取得に失敗しました\(error)")
+                        }
+                        guard let dic = messageSnapshot?.data() else { return }
+                        let message = Message(dic: dic)
+                        chatroom.latestMessage = message
+                        self.chatRooms.append(chatroom)
+                        self.chatListTableView.reloadData()
+                    }
                 }
             }
         }

@@ -16,7 +16,8 @@ class ChatListTableViewCell: UITableViewCell {
             guard let url = URL(string: chatRoom?.partnerUser?.profileImageUrl ?? "") else { return }
             Nuke.loadImage(with: url, into: userImageView)
 
-            dataLabel.text = chatRoom?.createdAt.dateValue().dateFormatterForDateLabel
+            dataLabel.text = chatRoom?.latestMessage?.createdAt.dateValue().dateFormatterForDateLabel
+            latestMessageLabel.text = chatRoom?.latestMessage?.message
         }
     }
 
