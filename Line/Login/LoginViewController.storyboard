@@ -69,9 +69,6 @@
                                 <state key="normal" title="Login">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
-                                <connections>
-                                    <action selector="tappedRegisterButton:" destination="C0p-gt-BXL" eventType="touchUpInside" id="9rR-MV-Dm8"/>
-                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CDp-Uc-Rlx">
                                 <rect key="frame" x="99.5" y="526" width="215" height="30"/>

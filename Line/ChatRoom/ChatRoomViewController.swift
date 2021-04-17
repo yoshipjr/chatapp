@@ -12,13 +12,17 @@ final class ChatRoomViewController: UIViewController {
 
     private let cellId = "cellId"
     private var messeages: [Message] = [Message]()
+    private let accessesaryHeight: CGFloat = 100
     var chatRoom: ChatRoom?
     var user: User?
+    private var safeAreaBottom: CGFloat {
+        self.view.safeAreaInsets.bottom
+    }
     
     private lazy var chatInputAccessaryView: ChatInputAccessaryView = {
         let view = ChatInputAccessaryView()
         view.delegate = self
-        view.frame = .init(x: 0, y: 0, width: view.frame.width, height: 100)
+        view.frame = .init(x: 0, y: 0, width: view.frame.width, height: accessesaryHeight)
         return view
     }()
 
@@ -38,6 +42,7 @@ final class ChatRoomViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         fetchMessage()
+        setupNotification()
     }
 
     override var inputAccessoryView: UIView? {
@@ -46,6 +51,32 @@ final class ChatRoomViewController: UIViewController {
 
     override var canBecomeFirstResponder: Bool {
         return true
+    }
+
+    private func setupNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyBoardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyBoardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+
+    @objc private func keyBoardWillShow(notification: NSNotification) {
+        guard let userInfo = notification.userInfo else { return }
+        if let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as AnyObject).cgRectValue {
+
+            if keyboardFrame.height <= accessesaryHeight { return }
+            let top = keyboardFrame.height - safeAreaBottom
+            var moveY = -(top - chatRoomTableView.contentOffset.y)
+            // 最下部意外の時は少しずれるので微調整
+            if chatRoomTableView.contentOffset.y != -60 { moveY += 60 }
+            let contentInset = UIEdgeInsets(top: top, left: 0, bottom: 0, right: 0)
+            chatRoomTableView.contentInset = contentInset
+            chatRoomTableView.scrollIndicatorInsets = contentInset
+            chatRoomTableView.contentOffset = .init(x: 0, y: moveY)
+        }
+    }
+    @objc private func keyBoardWillHide() {
+        print("keyboardwillHide")
+        chatRoomTableView.contentInset = .init(top: 0, left: 0, bottom: 40, right: 0)
+        chatRoomTableView.scrollIndicatorInsets = .init(top: 60, left: 0, bottom: 0, right: 0)
     }
 
     private func fetchMessage() {
@@ -68,8 +99,6 @@ final class ChatRoomViewController: UIViewController {
                             return m1Date > m2Date
                         }
                         self.chatRoomTableView.reloadData()
-                        // ここで自動スクロールしてくれる
-//                        self.chatRoomTableView.scrollToRow(at: IndexPath.init(row: self.messeages.count - 1 , section: 0), at: .bottom, animated: true)
                     case .modified:
                         break
                     case .removed:
@@ -89,7 +118,7 @@ extension ChatRoomViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = chatRoomTableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! ChatRoomTableViewCell
-        chatRoomTableView.transform = .init(a: 1, b: 0, c: 0, d: -1, tx: 0, ty: 0)
+        cell.transform = .init(a: 1, b: 0, c: 0, d: -1, tx: 0, ty: 0)
         cell.message = messeages[indexPath.row]
         return cell
     }
