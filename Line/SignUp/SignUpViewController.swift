@@ -28,7 +28,6 @@ final class SignUpViewController: UIViewController {
         }
     }
 
-
     @IBOutlet weak var passwordTextFiled: UITextField! {
         didSet {
             passwordTextFiled.delegate = self
@@ -87,7 +86,17 @@ final class SignUpViewController: UIViewController {
         }
     }
 
-    @IBOutlet weak var alreadyHaveAccountButton: UIButton!
+    @IBOutlet weak var alreadyHaveAccountButton: UIButton! {
+        didSet {
+            alreadyHaveAccountButton.addTarget(self, action: #selector(didAlreadyHaveAccountButtonTapped), for: .touchUpInside)
+        }
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = true
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -97,6 +106,12 @@ final class SignUpViewController: UIViewController {
         imagePickerController.delegate = self
         imagePickerController.allowsEditing = true
         self.present(imagePickerController, animated: true)
+    }
+
+    @objc private func didAlreadyHaveAccountButtonTapped() {
+        let storyboard = UIStoryboard.init(name: "LoginViewController", bundle: nil)
+        let loginViewController = storyboard.instantiateViewController(withIdentifier: "LoginViewController")
+        navigationController?.pushViewController(loginViewController, animated: true)
     }
 
     private func createUserToFirestore(url: String) {
