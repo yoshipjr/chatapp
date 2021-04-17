@@ -13,6 +13,7 @@ final class UserListViewController: UIViewController {
 
     private let cellId = "cellId"
     private var users = [User]()
+    private var selectedUser: User?
 
     @IBOutlet weak var userListTableView: UITableView! {
         didSet {
@@ -28,6 +29,7 @@ final class UserListViewController: UIViewController {
 
         let rightButton = UIBarButtonItem(title: "チャット開始", style: .plain, target: self, action: #selector(tappedChatStartButton))
         rightButton.tintColor = .white
+        rightButton.isEnabled = false
 
         navigationItem.leftBarButtonItem = leftButton
         navigationItem.rightBarButtonItem = rightButton
@@ -40,7 +42,25 @@ final class UserListViewController: UIViewController {
     }
 
     @objc private func tappedChatStartButton() {
+        guard  let uid = Auth.auth().currentUser?.uid, let partnerUid = self.selectedUser?.uid  else {
+            return
+        }
 
+        let members = [uid, partnerUid]
+
+        let data = [
+            "members" : members,
+            "latestMessageId" : "",
+            "creagedAt" : Timestamp()
+        ] as [String : Any]
+
+        Firestore.firestore().collection("chatRooms").addDocument(data: data ) { (error) in
+            if let error = error {
+                print("チャットルーム情報の保存に失敗しました\(error)")
+            }
+            self.dismiss(animated: true)
+            print("チャットルーム情報の保存に成功しました")
+        }
     }
 
     private func fetchUserInfoFromFirestore() {
@@ -51,7 +71,9 @@ final class UserListViewController: UIViewController {
             }
             snapshot?.documents.forEach({ (snapshot) in
                 let data = snapshot.data()
-                let user: User = User(dic: data)
+                var user: User = User(dic: data)
+
+                user.uid = snapshot.documentID
 
                 guard let uid = Auth.auth().currentUser?.uid else { return }
 
@@ -84,5 +106,9 @@ extension UserListViewController: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
 
-
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let user = users[indexPath.row]
+        self.selectedUser = user
+        navigationItem.rightBarButtonItem?.isEnabled = true
+    }
 }

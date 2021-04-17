@@ -1,3 +1,79 @@
+import Firebase
+
+
+final class FirestoreManager {
+
+    static let shared = FirestoreManager()
+    static let firestoreDb = shared.firestore
+    static let auth = shared.auth
+    private init() {}
+
+    private let firestore = Firestore.firestore()
+    private let auth = Auth.auth()
+
+    func createUser(data: [String: Any], completion: @escaping (Result<String, Error>) -> Void) {
+        firestore.collection("users").addDocument(data: data) { (error) in
+            if let error = error {
+                print("ユーザ情報の保存に失敗しました\(error)")
+                completion(.failure(error))
+                return
+            }
+            completion(.success("成功"))
+        }
+    }
+
+    func fetchLoginUserInfo(completion: @escaping (Result<User,Error>) -> Void) {
+        guard let uid = auth.currentUser?.uid else { return }
+        firestore.collection("users").document(uid).getDocument { (snapshot, error) in
+            if let error = error {
+                print("ユーザー情報の取得に失敗しました。\(error)")
+                completion(.failure(error))
+            }
+
+            guard
+                let snapshot = snapshot,
+                let data = snapshot.data() else
+            {
+                return
+            }
+
+            let user = User(dic: data)
+            completion(.success(user))
+        }
+    }
+
+    func fetchChataRoomsInfoFromFirestore(completion: @escaping (Result<User, Error>) -> Void) {
+        firestore.collection("chatRooms").getDocuments { (snapshots, err) in
+            if let err = err {
+                print("ChatRooms情報の取得に失敗しました。\(err)")
+                return
+            }
+
+            snapshots?.documents.forEach({ (snapshot) in
+                let dic = snapshot.data()
+                let chatroom = ChatRoom(dic: dic)
+
+                guard let uid = Auth.auth().currentUser?.uid else { return }
+                chatroom.memebers.forEach { (memberUid) in
+                    guard memberUid != uid else { return }
+                    self.firestore.collection("users").document(memberUid).getDocument { (snaoshot, err) in
+                        if let err = err {
+                            print("ユーザー情報の取得に失敗しました。\(err)")
+                            completion(.failure(err))
+                            return
+                        }
+
+                        guard let dic = snaoshot?.data() else { return }
+                        var user = User(dic: dic)
+                        user.uid = snapshot.documentID
+                        completion(.success(user))
+                    }
+                }
+            })
+        }
+    }
+}
+
 //import FirebaseCore
 //
 //import FirebaseFunctions

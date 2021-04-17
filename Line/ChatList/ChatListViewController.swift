@@ -12,6 +12,7 @@ import FirebaseAuth
 final class ChatListViewController: UIViewController {
 
     private let cellId: String = "cellId"
+    private var chatRooms = [ChatRoom]()
     private var user: User? {
         didSet {
             navigationItem.title = user?.userName
@@ -29,7 +30,66 @@ final class ChatListViewController: UIViewController {
         super.viewDidLoad()
         setupViews()
         confirmLoggedInUser()
-        fetchLoginUserInfo()
+        FirestoreManager.shared.fetchLoginUserInfo { (result) in
+            switch result {
+                case .success(let user):
+                    self.user = user
+
+                case .failure(_):
+                    break
+            }
+        }
+        fetchChatRoomsInfoFromFirestore()
+    }
+
+    private func fetchChatRoomsInfoFromFirestore() {
+        Firestore.firestore().collection("chatRooms")
+            .addSnapshotListener { (snapshots, err) in
+                if let err = err {
+                    print("ChatRooms情報の取得に失敗しました。\(err)")
+                    return
+                }
+                snapshots?.documentChanges.forEach({ (documentChange) in
+                    switch documentChange.type {
+                        case .added:
+                            self.handleAddedDocumentChanged(documentChange)
+                        case .modified:
+                            break
+                        case .removed:
+                            break
+                    }
+                })
+            }
+    }
+
+    private func handleAddedDocumentChanged(_ documentChange: DocumentChange ) {
+        let dic = documentChange.document.data()
+        var chatroom = ChatRoom(dic: dic)
+        chatroom.documentId = documentChange.document.documentID
+
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let isContain = chatroom.memebers.contains(uid)
+
+        if !isContain { return }
+        chatroom.memebers.forEach { (memberUid) in
+            if memberUid != uid {
+                Firestore.firestore().collection("users").document(memberUid).getDocument { (snaoshot, err) in
+                    if let err = err {
+                        print("ユーザー情報の取得に失敗しました。\(err)")
+                        return
+                    }
+
+                    guard let dic = snaoshot?.data() else { return }
+                    var user = User(dic: dic)
+                    user.uid = documentChange.document.documentID
+
+                    chatroom.partnerUser = user
+                    self.chatRooms.append(chatroom)
+                    print("self.chatroooms.count: ", self.chatRooms.count)
+                    self.chatListTableView.reloadData()
+                }
+            }
+        }
     }
 
     @objc private func tappedChatButton() {
@@ -60,23 +120,14 @@ final class ChatListViewController: UIViewController {
     }
 
     private func fetchLoginUserInfo() {
-        guard let uid = Auth.auth().currentUser?.uid else {
-            return
-            }
-        Firestore.firestore().collection("users").document(uid).getDocument { (snapshot, error) in
-            if let error = error {
-                print("ユーザー情報の取得に失敗しました。\(error)")
-            }
+        FirestoreManager.shared.fetchLoginUserInfo { (result) in
+            switch result {
+                case .success(let user):
+                    self.user = user
 
-            guard
-                let snapshot = snapshot,
-                let data = snapshot.data() else
-            {
-                return
+                case .failure(_):
+                    break
             }
-
-            let user = User(dic: data)
-            self.user = user
         }
     }
 
@@ -84,11 +135,13 @@ final class ChatListViewController: UIViewController {
 
 extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        return chatRooms.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = chatListTableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! ChatListTableViewCell
+
+        cell.chatRoom = chatRooms[indexPath.row]
 
         return cell
     }
@@ -98,7 +151,9 @@ extension ChatListViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let storyboard = UIStoryboard.init(name: "ChatRoom", bundle: nil)
-        let vc = storyboard.instantiateViewController(withIdentifier: "ChatRoomViewController")
+        let vc = storyboard.instantiateViewController(withIdentifier: "ChatRoomViewController") as! ChatRoomViewController
+        vc.chatRoom = chatRooms[indexPath.row]
+        vc.user = user
         navigationController?.pushViewController(vc, animated: true)
     }
 }
