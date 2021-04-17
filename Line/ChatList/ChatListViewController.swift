@@ -18,6 +18,7 @@ final class ChatListViewController: UIViewController {
             navigationItem.title = user?.userName
         }
     }
+    private var chatRoomListener: ListenerRegistration?
 
     @IBOutlet weak var chatListTableView: UITableView! {
         didSet {
@@ -26,10 +27,8 @@ final class ChatListViewController: UIViewController {
         }
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupViews()
-        confirmLoggedInUser()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         FirestoreManager.shared.fetchLoginUserInfo { (result) in
             switch result {
                 case .success(let user):
@@ -39,11 +38,22 @@ final class ChatListViewController: UIViewController {
                     break
             }
         }
+
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupViews()
+        confirmLoggedInUser()
         fetchChatRoomsInfoFromFirestore()
     }
 
-    private func fetchChatRoomsInfoFromFirestore() {
-        Firestore.firestore().collection("chatRooms")
+    func fetchChatRoomsInfoFromFirestore() {
+        chatRoomListener?.remove()
+        chatRooms.removeAll()
+        chatListTableView.reloadData()
+
+        chatRoomListener =  Firestore.firestore().collection("chatRooms")
             .addSnapshotListener { (snapshots, err) in
                 if let err = err {
                     print("ChatRooms情報の取得に失敗しました。\(err)")
@@ -73,20 +83,36 @@ final class ChatListViewController: UIViewController {
         if !isContain { return }
         chatroom.memebers.forEach { (memberUid) in
             if memberUid != uid {
-                Firestore.firestore().collection("users").document(memberUid).getDocument { (snaoshot, err) in
+                Firestore.firestore().collection("users").document(memberUid).getDocument { (userSnapshot, err) in
                     if let err = err {
                         print("ユーザー情報の取得に失敗しました。\(err)")
                         return
                     }
 
-                    guard let dic = snaoshot?.data() else { return }
+                    guard let dic = userSnapshot?.data()
+                    else { return }
+
                     var user = User(dic: dic)
                     user.uid = documentChange.document.documentID
-
+                    let latestMessageId = chatroom.latestMessageId
                     chatroom.partnerUser = user
-                    self.chatRooms.append(chatroom)
-                    print("self.chatroooms.count: ", self.chatRooms.count)
-                    self.chatListTableView.reloadData()
+
+                    if latestMessageId == "" {
+                        self.chatRooms.append(chatroom)
+                        self.chatListTableView.reloadData()
+                        return
+                    }
+
+                    Firestore.firestore().collection("chatRooms").document(chatroom.documentId ?? "" ).collection("messages").document(latestMessageId).getDocument { (messageSnapshot, error) in
+                        if let error = error {
+                            print("最新情報の取得に失敗しました\(error)")
+                        }
+                        guard let dic = messageSnapshot?.data() else { return }
+                        let message = Message(dic: dic)
+                        chatroom.latestMessage = message
+                        self.chatRooms.append(chatroom)
+                        self.chatListTableView.reloadData()
+                    }
                 }
             }
         }
@@ -99,13 +125,29 @@ final class ChatListViewController: UIViewController {
         self.present(nav, animated: true)
     }
 
+    @objc private func tappedLogoutButton() {
+        do{
+            try Auth.auth().signOut()
+            pushViewController()
+        } catch {
+            print("ログアウトに失敗しました\(error)")
+        }
+
+    }
+
     private func confirmLoggedInUser() {
         if Auth.auth().currentUser?.uid == nil {
-            let stroyBoard = UIStoryboard(name: "SignUp", bundle: nil)
-            let signUpViewController = stroyBoard.instantiateViewController(withIdentifier: "SignUpViewController") as! SignUpViewController
-            signUpViewController.modalPresentationStyle = .fullScreen
-            self.present(signUpViewController, animated: true)
+            pushViewController()
         }
+    }
+
+    private func pushViewController() {
+        let stroyBoard = UIStoryboard(name: "SignUp", bundle: nil)
+        let signUpViewController = stroyBoard.instantiateViewController(withIdentifier: "SignUpViewController") as! SignUpViewController
+
+        let nav = UINavigationController(rootViewController: signUpViewController)
+        nav.modalPresentationStyle = .fullScreen
+        self.present(nav, animated: true)
     }
 
     private func setupViews() {
@@ -114,9 +156,13 @@ final class ChatListViewController: UIViewController {
         navigationController?.navigationBar.titleTextAttributes = [ .foregroundColor: UIColor.white]
 
         let rightButton = UIBarButtonItem(title: "新規チャット", style: .plain, target: self, action: #selector(tappedChatButton))
+        let logoutButton = UIBarButtonItem(title: "ログアウト", style: .plain, target: self, action: #selector(tappedLogoutButton))
 
         navigationItem.rightBarButtonItem = rightButton
         navigationItem.rightBarButtonItem?.tintColor = .white
+
+        navigationItem.leftBarButtonItem = logoutButton
+        navigationItem.leftBarButtonItem?.tintColor = .white
     }
 
     private func fetchLoginUserInfo() {

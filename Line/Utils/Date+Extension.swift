@@ -10,7 +10,7 @@ import Foundation
 extension Date {
     var dateFormatterForDateLabel: String {
         let formatter = DateFormatter()
-        formatter.dateStyle = .full
+        formatter.dateStyle = .short
         formatter.timeStyle = .none
         formatter.locale = Locale(identifier: "ja_JP")
         return formatter.string(from: self)

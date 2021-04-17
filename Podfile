@@ -11,6 +11,7 @@ target 'Line' do
   pod 'Firebase/Storage'
   pod 'Firebase/Firestore'
   pod 'Nuke'
+  pod 'PKHUD'
 
   target 'LineTests' do
     inherit! :search_paths

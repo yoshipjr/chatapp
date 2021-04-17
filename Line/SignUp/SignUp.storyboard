@@ -118,7 +118,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="alreadyHaveAccountButton" destination="5JX-HN-Bd0" id="nwR-BU-UGY"/>
+                        <outlet property="alreadyHaveAccountButton" destination="5JX-HN-Bd0" id="exZ-V9-5VP"/>
                         <outlet property="emailTextFiled" destination="yze-rd-psT" id="i58-4S-X82"/>
                         <outlet property="passwordTextFiled" destination="Zit-E0-3L3" id="LPl-QL-CEw"/>
                         <outlet property="profileButton" destination="aP8-WT-Sb0" id="gjp-b9-r2m"/>
