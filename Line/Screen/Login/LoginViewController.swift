@@ -42,7 +42,7 @@ final class LoginViewController: UIViewController {
         HUD.show(.progress)
         Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
             if let error = error {
-                print("ログインに失敗しました\(error)")
+                HUD.hide()
                 return
             }
             HUD.hide()
