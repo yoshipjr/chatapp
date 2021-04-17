@@ -7,6 +7,7 @@
 
 import UIKit
 import Firebase
+import PKHUD
 
 final class LoginViewController: UIViewController {
 
@@ -38,17 +39,22 @@ final class LoginViewController: UIViewController {
         {
             return
         }
-
+        HUD.show(.progress)
         Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
             if let error = error {
                 print("ログインに失敗しました\(error)")
                 return
             }
+            HUD.hide()
             print("ログインに成功しました")
             let nav = self.presentingViewController as! UINavigationController
             let chatlistViewController = nav.viewControllers[nav.viewControllers.count - 1] as? ChatListViewController
             chatlistViewController?.fetchChatRoomsInfoFromFirestore()
             self.dismiss(animated: true)
         }
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
 }

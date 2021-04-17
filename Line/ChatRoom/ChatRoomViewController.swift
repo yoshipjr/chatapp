@@ -29,7 +29,9 @@ final class ChatRoomViewController: UIViewController {
             chatRoomTableView.register(UINib(nibName: "ChatRoomTableViewCell", bundle: nil), forCellReuseIdentifier: cellId)
             chatRoomTableView.backgroundColor = .rgb(red: 118, green: 140, blue: 180)
             chatRoomTableView.contentInset = .init(top: 0, left: 0, bottom: 40, right: 0)
-            chatRoomTableView.scrollIndicatorInsets = .init(top: 0, left: 0, bottom: 40, right: 0)
+            chatRoomTableView.scrollIndicatorInsets = .init(top: 60, left: 0, bottom: 0, right: 0)
+            chatRoomTableView.keyboardDismissMode = .interactive
+            chatRoomTableView.transform = .init(a: 1, b: 0, c: 0, d: -1, tx: 0, ty: 0)
         }
     }
 
@@ -63,11 +65,11 @@ final class ChatRoomViewController: UIViewController {
                         self.messeages.sort { (m1, m2) -> Bool in
                             let m1Date = m1.createdAt.dateValue()
                             let m2Date = m2.createdAt.dateValue()
-                            return m1Date < m2Date
+                            return m1Date > m2Date
                         }
                         self.chatRoomTableView.reloadData()
                         // ここで自動スクロールしてくれる
-                        self.chatRoomTableView.scrollToRow(at: IndexPath.init(row: self.messeages.count - 1 , section: 0), at: .bottom, animated: true)
+//                        self.chatRoomTableView.scrollToRow(at: IndexPath.init(row: self.messeages.count - 1 , section: 0), at: .bottom, animated: true)
                     case .modified:
                         break
                     case .removed:
@@ -87,6 +89,7 @@ extension ChatRoomViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = chatRoomTableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! ChatRoomTableViewCell
+        chatRoomTableView.transform = .init(a: 1, b: 0, c: 0, d: -1, tx: 0, ty: 0)
         cell.message = messeages[indexPath.row]
         return cell
     }
