@@ -10,9 +10,10 @@ final class FirestoreManager {
 
     private let firestore = Firestore.firestore()
     private let auth = Auth.auth()
+    private let storage = Storage.storage()
 
     enum result {
-        case success
+        case success(String?)
         case failure(Error)
     }
 
@@ -116,7 +117,40 @@ final class FirestoreManager {
                 return
             }
             HUDManager.shared.hide()
-            completion(.success)
+            completion(.success(nil))
+        }
+    }
+
+    func uploadImageToFirestorage(image: UIImage, completion: @escaping (result) -> Void) {
+
+        guard let uploadImage = image.jpegData(compressionQuality: 0.3)  else {
+            return
+        }
+        let fileName = NSUUID().uuidString
+        let storageRef = storage.reference().child("profile_image").child(fileName)
+        storageRef.putData(uploadImage, metadata: nil) { metadata, error in
+            if let error = error {
+                HUDManager.shared.hide()
+                completion(.failure(error))
+                return
+            }
+            storageRef.downloadURL { (url, error) in
+                if let error = error {
+//                    print("firestorageからのダウンロードに失敗しました。\(error)")
+//                    let arert = UIAlertController(title: "ダウンロードに失敗しました", message: "画像のダウンロードに失敗", preferredStyle: .alert)
+//                    self.present(arert, animated: true)
+//                    HUDManager.shared.hide()
+                    completion(.failure(error))
+                    return
+                }
+                guard let urlString = url?.absoluteString else { return }
+                completion(.success(urlString))
+//                FirestoreManager.shared.createUserToFirestore(email: email, password: password, userName: userName, url: url) {
+//                    HUDManager.shared.hide()
+//                    self.dismiss(animated: true)
+//                }
+            }
+
         }
     }
 }

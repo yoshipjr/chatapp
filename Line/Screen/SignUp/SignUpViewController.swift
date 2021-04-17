@@ -6,9 +6,6 @@
 //
 
 import UIKit
-import Firebase
-import FirebaseFirestore
-import FirebaseAuth
 
 final class SignUpViewController: UIViewController {
 
@@ -47,39 +44,34 @@ final class SignUpViewController: UIViewController {
     }
 
     @IBAction func tappedRegisterButton(_ sender: Any) {
-        let image = profileButton.imageView?.image ?? UIImage(named: "fiji")
-        guard let uploadImage = image?.jpegData(compressionQuality: 0.3)  else {
-            return
-        }
+        guard let image = profileButton.imageView?.image else { return }
         HUDManager.shared.show()
-        let fileName = NSUUID().uuidString
-        let storageRef = Storage.storage().reference().child("profile_image").child(fileName)
-        storageRef.putData(uploadImage, metadata: nil) { metadata, error in
-            if let error = error {
-                HUDManager.shared.hide()
-                self.showSimpleAlert(title: "画像のストレージ保存に失敗", message: error.localizedDescription)
-                return
-            }
-            storageRef.downloadURL { (url, error) in
-                if let error = error {
-                    print("firestorageからのダウンロードに失敗しました。\(error)")
-                    let arert = UIAlertController(title: "ダウンロードに失敗しました", message: "画像のダウンロードに失敗", preferredStyle: .alert)
-                    self.present(arert, animated: true)
+        FirestoreManager.shared.uploadImageToFirestorage(image: image) { (result) in
+            switch result {
+                case .success(let url):
+                    guard
+                        let email = self.emailTextFiled.text,
+                        let pasword = self.passwordTextFiled.text,
+                        let username = self.usernameTextFiled.text,
+                        let url = url else
+                    {
+                        return
+                    }
+
+                    FirestoreManager.shared.createUserToFirestore(email: email,
+                                                                  password: pasword,
+                                                                  userName: username,
+                                                                  url: url) {
+                        HUDManager.shared.hide()
+                        self.dismiss(animated: true)
+                    }
+                    break
+
+                case .failure(let error):
                     HUDManager.shared.hide()
-                    return
-                }
-                guard let urlString = url?.absoluteString else {
-                    return
-                }
-
-                guard let email = self.emailTextFiled.text, let pasword = self.passwordTextFiled.text, let username = self.usernameTextFiled.text else { return }
-
-                FirestoreManager.shared.createUserToFirestore(email: email, password: pasword, userName: username, url: urlString) {
-                    HUDManager.shared.hide()
-                    self.dismiss(animated: true)
-                }
+                    self.showSimpleAlert(title: "画像のストレージ保存に失敗", message: error.localizedDescription)
+                    break
             }
-
         }
     }
 
