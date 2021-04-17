@@ -11,6 +11,11 @@ final class FirestoreManager {
     private let firestore = Firestore.firestore()
     private let auth = Auth.auth()
 
+    enum result {
+        case success
+        case failure(Error)
+    }
+
     func createUser(data: [String: Any], completion: @escaping (Result<String, Error>) -> Void) {
         firestore.collection("users").addDocument(data: data) { (error) in
             if let error = error {
@@ -102,7 +107,20 @@ final class FirestoreManager {
         }
 
     }
+
+    func login(email: String, password: String, completion: @escaping (result) -> Void) {
+        auth.signIn(withEmail: email, password: password) { (result, error) in
+            if let error = error {
+                HUDManager.shared.hide()
+                completion(.failure(error))
+                return
+            }
+            HUDManager.shared.hide()
+            completion(.success)
+        }
+    }
 }
+
 
 //import FirebaseCore
 //

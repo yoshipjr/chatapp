@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Firebase
 
 final class LoginViewController: UIViewController {
 
@@ -39,18 +38,20 @@ final class LoginViewController: UIViewController {
             return
         }
         HUDManager.shared.show()
-        Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
-            if let error = error {
-                HUDManager.shared.hide()
-                self.showSimpleAlert(title: "ログインに失敗", message: error.localizedDescription)
-                return
+        FirestoreManager.shared.login(email: email, password: password) { (result) in
+            switch result {
+                case .success:
+                    HUDManager.shared.hide()
+                    print("ログインに成功しました")
+                    let nav = self.presentingViewController as! UINavigationController
+                    let chatlistViewController = nav.viewControllers[nav.viewControllers.count - 1] as? ChatListViewController
+                    chatlistViewController?.fetchChatRoomsInfoFromFirestore()
+                    self.dismiss(animated: true)
+                case .failure(let error):
+                    HUDManager.shared.hide()
+                    self.showSimpleAlert(title: "ログインに失敗", message: error.localizedDescription)
+                    break
             }
-            HUDManager.shared.hide()
-            print("ログインに成功しました")
-            let nav = self.presentingViewController as! UINavigationController
-            let chatlistViewController = nav.viewControllers[nav.viewControllers.count - 1] as? ChatListViewController
-            chatlistViewController?.fetchChatRoomsInfoFromFirestore()
-            self.dismiss(animated: true)
         }
     }
 
