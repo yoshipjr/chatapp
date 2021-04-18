@@ -136,21 +136,35 @@ final class FirestoreManager {
             }
             storageRef.downloadURL { (url, error) in
                 if let error = error {
-//                    print("firestorageからのダウンロードに失敗しました。\(error)")
-//                    let arert = UIAlertController(title: "ダウンロードに失敗しました", message: "画像のダウンロードに失敗", preferredStyle: .alert)
-//                    self.present(arert, animated: true)
-//                    HUDManager.shared.hide()
                     completion(.failure(error))
                     return
                 }
                 guard let urlString = url?.absoluteString else { return }
                 completion(.success(urlString))
-//                FirestoreManager.shared.createUserToFirestore(email: email, password: password, userName: userName, url: url) {
-//                    HUDManager.shared.hide()
-//                    self.dismiss(animated: true)
-//                }
             }
+        }
+    }
 
+    func startChat(selectedUserID: String, completion: @escaping (result) -> Void) {
+        guard  let uid = auth.currentUser?.uid
+            else
+        {
+            return
+        }
+
+        let members = [uid, selectedUserID]
+
+        let data = [
+            "members" : members,
+            "latestMessageId" : "",
+            "creagedAt" : Timestamp()
+        ] as [String : Any]
+
+        firestore.collection("chatRooms").addDocument(data: data ) { (error) in
+            if let error = error {
+                completion(.failure(error))
+            }
+            completion(.success(nil))
         }
     }
 }

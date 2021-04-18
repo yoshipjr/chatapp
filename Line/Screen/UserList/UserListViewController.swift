@@ -42,24 +42,20 @@ final class UserListViewController: UIViewController {
     }
 
     @objc private func tappedChatStartButton() {
-        guard  let uid = Auth.auth().currentUser?.uid, let partnerUid = self.selectedUser?.uid  else {
+        guard
+               let partnerUid = selectedUser?.uid  else
+        {
             return
         }
-
-        let members = [uid, partnerUid]
-
-        let data = [
-            "members" : members,
-            "latestMessageId" : "",
-            "creagedAt" : Timestamp()
-        ] as [String : Any]
-
-        Firestore.firestore().collection("chatRooms").addDocument(data: data ) { (error) in
-            if let error = error {
-                print("チャットルーム情報の保存に失敗しました\(error)")
+        FirestoreManager.shared.startChat(selectedUserID: partnerUid) { (result) in
+            switch result {
+                case .success:
+                    self.dismiss(animated: true)
+                    break
+                case .failure(let error):
+                    self.showSimpleAlert(title: "チャットルーム情報の保存に失敗しました", message: error.localizedDescription)
+                    break
             }
-            self.dismiss(animated: true)
-            print("チャットルーム情報の保存に成功しました")
         }
     }
 
