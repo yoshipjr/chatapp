@@ -10,13 +10,13 @@ import UIKit
 final class UserListViewController: UIViewController {
 
     private let cellId = "cellId"
-    private var users = [User]()
     private var selectedUser: User?
+    private var datasource: UserListTableViewDatasource = UserListTableViewDatasource()
 
     @IBOutlet weak var userListTableView: UITableView! {
         didSet {
             userListTableView.delegate = self
-            userListTableView.dataSource = self
+            userListTableView.dataSource = datasource
         }
     }
     override func viewDidLoad() {
@@ -61,12 +61,8 @@ final class UserListViewController: UIViewController {
         FirestoreManager.shared.fetchUserInfoFromFirestore { (result) in
             switch result {
                 case .success(let user):
-                    self.users.append(user)
+                    self.datasource.users.append(user)
                     self.userListTableView.reloadData()
-
-                    self.users.forEach { (user) in
-                        print("user:", user.userName)
-                    }
                 case .failure(let error):
                     self.showSimpleAlert(title: "user情報の取得に失敗", message: error.localizedDescription)
             }
@@ -74,21 +70,9 @@ final class UserListViewController: UIViewController {
     }
 }
 
-
-extension UserListViewController: UITableViewDelegate, UITableViewDataSource {
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return users.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = userListTableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! UserListTableViewCell
-        cell.user = users[indexPath.row]
-        return cell
-    }
-
+extension UserListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let user = users[indexPath.row]
+        let user = datasource.users[indexPath.row]
         self.selectedUser = user
         navigationItem.rightBarButtonItem?.isEnabled = true
     }

@@ -14,7 +14,7 @@
 		7D72F99D2621EAB200A41C32 /* UserListViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D72F99C2621EAB100A41C32 /* UserListViewController.storyboard */; };
 		7D72F9A52621EC5C00A41C32 /* UserListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D72F9A42621EC5C00A41C32 /* UserListViewController.swift */; };
 		7D72F9AA2621F90800A41C32 /* UserListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D72F9A92621F90800A41C32 /* UserListTableViewCell.swift */; };
-		7D72F9CA2622A17D00A41C32 /* ChatListTableViewDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D72F9C92622A17C00A41C32 /* ChatListTableViewDatasource.swift */; };
+		7D72F9CA2622A17D00A41C32 /* UserListTableViewDatasource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D72F9C92622A17C00A41C32 /* UserListTableViewDatasource.swift */; };
 		7D72F9CF2622E19400A41C32 /* ChatRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D72F9CE2622E19300A41C32 /* ChatRoom.swift */; };
 		7D72F9D426230C8D00A41C32 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D72F9D326230C8C00A41C32 /* Date+Extension.swift */; };
 		7D79581B260EF333006C7D69 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D79581A260EF333006C7D69 /* AppDelegate.swift */; };
@@ -72,7 +72,7 @@
 		7D72F99C2621EAB100A41C32 /* UserListViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = UserListViewController.storyboard; sourceTree = "<group>"; };
 		7D72F9A42621EC5C00A41C32 /* UserListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListViewController.swift; sourceTree = "<group>"; };
 		7D72F9A92621F90800A41C32 /* UserListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListTableViewCell.swift; sourceTree = "<group>"; };
-		7D72F9C92622A17C00A41C32 /* ChatListTableViewDatasource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListTableViewDatasource.swift; sourceTree = "<group>"; };
+		7D72F9C92622A17C00A41C32 /* UserListTableViewDatasource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserListTableViewDatasource.swift; sourceTree = "<group>"; };
 		7D72F9CE2622E19300A41C32 /* ChatRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoom.swift; sourceTree = "<group>"; };
 		7D72F9D326230C8C00A41C32 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		7D795817260EF333006C7D69 /* Line.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Line.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -168,6 +168,7 @@
 				7D72F99C2621EAB100A41C32 /* UserListViewController.storyboard */,
 				7D72F9A42621EC5C00A41C32 /* UserListViewController.swift */,
 				7D72F9A92621F90800A41C32 /* UserListTableViewCell.swift */,
+				7D72F9C92622A17C00A41C32 /* UserListTableViewDatasource.swift */,
 			);
 			path = UserList;
 			sourceTree = "<group>";
@@ -235,7 +236,6 @@
 				7D8169312617F25F00F37996 /* ChatList.storyboard */,
 				7D8169362617F29100F37996 /* ChatListViewController.swift */,
 				7D81693B2617F97600F37996 /* ChatListTableViewCell.swift */,
-				7D72F9C92622A17C00A41C32 /* ChatListTableViewDatasource.swift */,
 			);
 			path = ChatList;
 			sourceTree = "<group>";
@@ -566,7 +566,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7DCC3B6A262AB1AC0047FF17 /* LoginViewController.swift in Sources */,
-				7D72F9CA2622A17D00A41C32 /* ChatListTableViewDatasource.swift in Sources */,
+				7D72F9CA2622A17D00A41C32 /* UserListTableViewDatasource.swift in Sources */,
 				7D72F9D426230C8D00A41C32 /* Date+Extension.swift in Sources */,
 				7D8169832618652F00F37996 /* ChatInputAccessaryView.swift in Sources */,
 				7D287E54262862CF0070E29B /* Message.swift in Sources */,
