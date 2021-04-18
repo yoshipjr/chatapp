@@ -167,6 +167,29 @@ final class FirestoreManager {
             completion(.success(nil))
         }
     }
+
+    func fetchUserInfoFromFirestore(completion: @escaping (Result<User, Error>) -> Void) {
+        firestore.collection("users").getDocuments { (snapshot, error) in
+            if let error = error {
+                print("user情報の取得に失敗しました。\(error)")
+                completion(.failure(error))
+                return
+            }
+            snapshot?.documents.forEach({ (snapshot) in
+                let data = snapshot.data()
+                var user: User = User(dic: data)
+
+                user.uid = snapshot.documentID
+
+                guard let uid = self.auth.currentUser?.uid else { return }
+
+                if uid == snapshot.documentID {
+                    return
+                }
+                completion(.success(user))
+            })
+        }
+    }
 }
 
 

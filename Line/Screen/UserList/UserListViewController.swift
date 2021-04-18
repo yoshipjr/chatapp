@@ -6,8 +6,6 @@
 //
 
 import UIKit
-import Firebase
-import FirebaseFirestore
 
 final class UserListViewController: UIViewController {
 
@@ -60,31 +58,18 @@ final class UserListViewController: UIViewController {
     }
 
     private func fetchUserInfoFromFirestore() {
-        Firestore.firestore().collection("users").getDocuments { (snapshot, error) in
-            if let error = error {
-                print("user情報の取得に失敗しました。\(error)")
+        FirestoreManager.shared.fetchUserInfoFromFirestore { (result) in
+            switch result {
+                case .success(let user):
+                    self.users.append(user)
+                    self.userListTableView.reloadData()
 
+                    self.users.forEach { (user) in
+                        print("user:", user.userName)
+                    }
+                case .failure(let error):
+                    self.showSimpleAlert(title: "user情報の取得に失敗", message: error.localizedDescription)
             }
-            snapshot?.documents.forEach({ (snapshot) in
-                let data = snapshot.data()
-                var user: User = User(dic: data)
-
-                user.uid = snapshot.documentID
-
-                guard let uid = Auth.auth().currentUser?.uid else { return }
-
-                if uid == snapshot.documentID {
-                    return
-                }
-
-                self.users.append(user)
-                self.userListTableView.reloadData()
-
-                self.users.forEach { (user) in
-                    print("user:", user.userName)
-                }
-            })
-
         }
     }
 }
