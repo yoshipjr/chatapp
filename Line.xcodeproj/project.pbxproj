@@ -39,6 +39,8 @@
 		7D8169B32618ADC600F37996 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8169B22618ADC600F37996 /* SignUpViewController.swift */; };
 		7DCC3B61262AAF870047FF17 /* LoginViewController.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7DCC3B60262AAF870047FF17 /* LoginViewController.storyboard */; };
 		7DCC3B6A262AB1AC0047FF17 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCC3B69262AB1AC0047FF17 /* LoginViewController.swift */; };
+		7DCC3B90262AE8200047FF17 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCC3B8F262AE8200047FF17 /* UIView+Extension.swift */; };
+		7DCC3BB2262AEDCB0047FF17 /* HUDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCC3BB1262AEDCB0047FF17 /* HUDManager.swift */; };
 		B57E4D9F74ACB8D0736F6A02 /* Pods_Line_LineUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC98BC0E50F9C203D173537F /* Pods_Line_LineUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -101,6 +103,8 @@
 		7D8169B22618ADC600F37996 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		7DCC3B60262AAF870047FF17 /* LoginViewController.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LoginViewController.storyboard; sourceTree = "<group>"; };
 		7DCC3B69262AB1AC0047FF17 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		7DCC3B8F262AE8200047FF17 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
+		7DCC3BB1262AEDCB0047FF17 /* HUDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDManager.swift; sourceTree = "<group>"; };
 		9ACB060CAECDA09329ED81FD /* Pods_Line.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Line.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9A9A0067D02A173F24AA718 /* Pods-LineTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-LineTests.release.xcconfig"; path = "Target Support Files/Pods-LineTests/Pods-LineTests.release.xcconfig"; sourceTree = "<group>"; };
 		BC98BC0E50F9C203D173537F /* Pods_Line_LineUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Line_LineUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -193,14 +197,10 @@
 		7D795819260EF333006C7D69 /* Line */ = {
 			isa = PBXGroup;
 			children = (
-				7DCC3B65262AAFAA0047FF17 /* Login */,
-				7D72F99B2621EA9400A41C32 /* UserList */,
+				7DCC3B8B262AE7BF0047FF17 /* Screen */,
 				7D72F9922621CBBD00A41C32 /* model */,
-				7D8169AC2618A98400F37996 /* SignUp */,
 				7D8169A22618A83700F37996 /* Manager */,
-				7D8169612618243D00F37996 /* ChatRoom */,
 				7D81694A26181F1900F37996 /* Utils */,
-				7D81694926181ECD00F37996 /* ChatList */,
 				7D79581A260EF333006C7D69 /* AppDelegate.swift */,
 				7D79581C260EF333006C7D69 /* SceneDelegate.swift */,
 				7D795823260EF335006C7D69 /* Assets.xcassets */,
@@ -245,6 +245,7 @@
 			children = (
 				7D81694B26181F3500F37996 /* UIColor+Extension.swift */,
 				7D72F9D326230C8C00A41C32 /* Date+Extension.swift */,
+				7DCC3B8F262AE8200047FF17 /* UIView+Extension.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -274,6 +275,7 @@
 			isa = PBXGroup;
 			children = (
 				7D8169A32618A85B00F37996 /* FirebaseManager.swift */,
+				7DCC3BB1262AEDCB0047FF17 /* HUDManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -294,6 +296,18 @@
 				7DCC3B69262AB1AC0047FF17 /* LoginViewController.swift */,
 			);
 			path = Login;
+			sourceTree = "<group>";
+		};
+		7DCC3B8B262AE7BF0047FF17 /* Screen */ = {
+			isa = PBXGroup;
+			children = (
+				7D8169AC2618A98400F37996 /* SignUp */,
+				7DCC3B65262AAFAA0047FF17 /* Login */,
+				7D72F99B2621EA9400A41C32 /* UserList */,
+				7D8169612618243D00F37996 /* ChatRoom */,
+				7D81694926181ECD00F37996 /* ChatList */,
+			);
+			path = Screen;
 			sourceTree = "<group>";
 		};
 		D6BE95656F0D029E0D0A3F8A /* Frameworks */ = {
@@ -563,12 +577,14 @@
 				7D8169A42618A85C00F37996 /* FirebaseManager.swift in Sources */,
 				7D8169B32618ADC600F37996 /* SignUpViewController.swift in Sources */,
 				7D72F9A52621EC5C00A41C32 /* UserListViewController.swift in Sources */,
+				7DCC3B90262AE8200047FF17 /* UIView+Extension.swift in Sources */,
 				7D79581B260EF333006C7D69 /* AppDelegate.swift in Sources */,
 				7D8169372617F29100F37996 /* ChatListViewController.swift in Sources */,
 				7D79581D260EF333006C7D69 /* SceneDelegate.swift in Sources */,
 				7D81694C26181F3500F37996 /* UIColor+Extension.swift in Sources */,
 				7D816966261824CD00F37996 /* ChatRoomViewController.swift in Sources */,
 				7D72F9942621CBD500A41C32 /* User.swift in Sources */,
+				7DCC3BB2262AEDCB0047FF17 /* HUDManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

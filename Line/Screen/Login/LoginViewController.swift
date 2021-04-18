@@ -6,8 +6,6 @@
 //
 
 import UIKit
-import Firebase
-import PKHUD
 
 final class LoginViewController: UIViewController {
 
@@ -39,18 +37,21 @@ final class LoginViewController: UIViewController {
         {
             return
         }
-        HUD.show(.progress)
-        Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
-            if let error = error {
-                print("ログインに失敗しました\(error)")
-                return
+        HUDManager.shared.show()
+        FirestoreManager.shared.login(email: email, password: password) { (result) in
+            switch result {
+                case .success:
+                    HUDManager.shared.hide()
+                    print("ログインに成功しました")
+                    let nav = self.presentingViewController as! UINavigationController
+                    let chatlistViewController = nav.viewControllers[nav.viewControllers.count - 1] as? ChatListViewController
+                    chatlistViewController?.fetchChatRoomsInfoFromFirestore()
+                    self.dismiss(animated: true)
+                case .failure(let error):
+                    HUDManager.shared.hide()
+                    self.showSimpleAlert(title: "ログインに失敗", message: error.localizedDescription)
+                    break
             }
-            HUD.hide()
-            print("ログインに成功しました")
-            let nav = self.presentingViewController as! UINavigationController
-            let chatlistViewController = nav.viewControllers[nav.viewControllers.count - 1] as? ChatListViewController
-            chatlistViewController?.fetchChatRoomsInfoFromFirestore()
-            self.dismiss(animated: true)
         }
     }
 

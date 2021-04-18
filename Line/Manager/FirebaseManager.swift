@@ -1,5 +1,5 @@
 import Firebase
-
+import UIKit
 
 final class FirestoreManager {
 
@@ -10,6 +10,12 @@ final class FirestoreManager {
 
     private let firestore = Firestore.firestore()
     private let auth = Auth.auth()
+    private let storage = Storage.storage()
+
+    enum result {
+        case success(String?)
+        case failure(Error)
+    }
 
     func createUser(data: [String: Any], completion: @escaping (Result<String, Error>) -> Void) {
         firestore.collection("users").addDocument(data: data) { (error) in
@@ -72,7 +78,97 @@ final class FirestoreManager {
             })
         }
     }
+
+    func createUserToFirestore(email: String, password: String, userName: String, url: String, successHandler: @escaping () -> Void ) {
+        auth.createUser(withEmail: email, password: password) { (response, err) in
+            if let err =  err {
+                print("auth情報の保存に失敗しました:", err)
+                HUDManager.shared.hide()
+                return
+            }
+
+
+            let docdata: [String : Any] = [
+                "email" : email,
+                "username" : userName,
+                "imageUrl" : url,
+                "createdAt" : Timestamp()
+            ]
+
+            guard let uid = response?.user.uid else { return }
+            self.firestore.collection("users").document(uid).setData(docdata) { (err) in
+                if let err = err {
+                    print("データベースへの保存に失敗しました。", err)
+                    HUDManager.shared.hide()
+                    return
+                }
+                print("データベースへの保存に成功しました")
+                successHandler()
+            }
+        }
+
+    }
+
+    func login(email: String, password: String, completion: @escaping (result) -> Void) {
+        auth.signIn(withEmail: email, password: password) { (result, error) in
+            if let error = error {
+                HUDManager.shared.hide()
+                completion(.failure(error))
+                return
+            }
+            HUDManager.shared.hide()
+            completion(.success(nil))
+        }
+    }
+
+    func uploadImageToFirestorage(image: UIImage, completion: @escaping (result) -> Void) {
+
+        guard let uploadImage = image.jpegData(compressionQuality: 0.3)  else {
+            return
+        }
+        let fileName = NSUUID().uuidString
+        let storageRef = storage.reference().child("profile_image").child(fileName)
+        storageRef.putData(uploadImage, metadata: nil) { metadata, error in
+            if let error = error {
+                HUDManager.shared.hide()
+                completion(.failure(error))
+                return
+            }
+            storageRef.downloadURL { (url, error) in
+                if let error = error {
+                    completion(.failure(error))
+                    return
+                }
+                guard let urlString = url?.absoluteString else { return }
+                completion(.success(urlString))
+            }
+        }
+    }
+
+    func startChat(selectedUserID: String, completion: @escaping (result) -> Void) {
+        guard  let uid = auth.currentUser?.uid
+            else
+        {
+            return
+        }
+
+        let members = [uid, selectedUserID]
+
+        let data = [
+            "members" : members,
+            "latestMessageId" : "",
+            "creagedAt" : Timestamp()
+        ] as [String : Any]
+
+        firestore.collection("chatRooms").addDocument(data: data ) { (error) in
+            if let error = error {
+                completion(.failure(error))
+            }
+            completion(.success(nil))
+        }
+    }
 }
+
 
 //import FirebaseCore
 //
